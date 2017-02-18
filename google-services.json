@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "166863566107",
+    "firebase_url": "https://wallpics-ace58.firebaseio.com",
+    "project_id": "wallpics-ace58",
+    "storage_bucket": "wallpics-ace58.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:166863566107:android:36c9906ef4becc74",
+        "android_client_info": {
+          "package_name": "com.example.android.wallpics"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "166863566107-h044tthob70n30q6qfel00fqjef9uqd4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.android.wallpics",
+            "certificate_hash": "5EAB814964565B6D084FAD9A7DEEC8B3C6C83EDE"
+          }
+        },
+        {
+          "client_id": "166863566107-a036cel635qf3peb3di668k5c35qefus.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBMs7S2PVjugxSUDSp-Xp0wltV4Jhr5CQU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "166863566107-a036cel635qf3peb3di668k5c35qefus.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
