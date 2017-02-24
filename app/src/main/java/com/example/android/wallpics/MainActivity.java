@@ -1,5 +1,6 @@
 package com.example.android.wallpics;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -29,13 +30,14 @@ public class MainActivity extends AppCompatActivity {
 
     private static int GALLERY=1;
     private StorageReference mStorage;
-
+    private ProgressDialog progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mStorage= FirebaseStorage.getInstance().getReference();
+        progress= new ProgressDialog(this);
         Button uploadButton=(Button) findViewById(R.id.upload);
         uploadButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,17 +56,15 @@ public class MainActivity extends AppCompatActivity {
 
         if (requestCode==GALLERY && resultCode==RESULT_OK)
         {
+            progress.setMessage("Uploading...");
+            progress.show();
             Uri dataUri = data.getData();
             StorageReference ref = mStorage.child("MyImages").child(dataUri.getLastPathSegment());
             ref.putFile(dataUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     Toast.makeText(getApplicationContext(),"Upload Successful",Toast.LENGTH_SHORT).show();
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(getApplicationContext(),"Upload Failed",Toast.LENGTH_SHORT).show();
+                    progress.dismiss();
                 }
             });
         }
