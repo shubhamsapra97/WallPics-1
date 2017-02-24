@@ -19,8 +19,8 @@ import java.util.ArrayList;
 /**
  * Created by Rachit on 2/18/2017.
  */
-public class GridAdapter extends ArrayAdapter<GridItem> {
-    public GridAdapter(Context context, ArrayList<GridItem> grid) {
+public class GridAdapter extends ArrayAdapter<String> {
+    public GridAdapter(Context context, ArrayList<String> grid) {
         super(context, 0,grid);
     }
     @Override
@@ -30,12 +30,11 @@ public class GridAdapter extends ArrayAdapter<GridItem> {
             gridView = LayoutInflater.from(getContext()).inflate(
                     R.layout.grid_item, parent, false);
         }
-        GridItem item = getItem(position);
+        String item = getItem(position);
 
         ImageView imageView = (ImageView) gridView.findViewById(R.id.image);
-        String imageUrl=item.getImageUrl();
         try {
-           URL url=new URL(imageUrl);
+           URL url=new URL(item);
             Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
             imageView.setImageBitmap(bmp);
         } catch (MalformedURLException e) {

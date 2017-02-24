@@ -2,44 +2,71 @@ package com.example.android.wallpics;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ListView;
+import android.widget.Toast;
 import android.widget.VideoView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    private FirebaseAuth mFirebaseAuth;
-    private FirebaseUser mFirebaseUser;
+
+    private static int GALLERY=1;
+    private StorageReference mStorage;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        mFirebaseAuth = FirebaseAuth.getInstance();
-        mFirebaseUser = mFirebaseAuth.getCurrentUser();
-//        if (mFirebaseUser == null) {
-//            // Not signed in, launch the Sign In activity
-//            startActivity(new Intent(this, SignInActivity.class));
-//            finish();
-//            return;
-//        } else {
-//            mUsername = mFirebaseUser.getDisplayName();
-//            if (mFirebaseUser.getPhotoUrl() != null) {
-//                mPhotoUrl = mFirebaseUser.getPhotoUrl().toString();
-//            }
-//        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ArrayList<GridItem> imageList= new ArrayList<GridItem>();
-        imageList.add(new GridItem("www.google.co.in/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&cad=rja&uact=8&ved=0ahUKEwiL3b-hjJnSAhVIpI8KHc2FBzsQjRwIBw&url=https%3A%2F%2Fen.wikipedia.org%2Fwiki%2FSunset&psig=AFQjCNFrDck80EmE6YHTzvG2s74SahIzWw&ust=1487488401043378"));
-        GridAdapter adapter = new GridAdapter(this, imageList);
-        GridView gridView = (GridView) findViewById(R.id.gridview);
-        gridView.setAdapter(adapter);
+        mStorage= FirebaseStorage.getInstance().getReference();
+        Button uploadButton=(Button) findViewById(R.id.upload);
+        uploadButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent pick = new Intent(Intent.ACTION_PICK);
+                pick.setType("image/*");
+                Intent chooser = new Intent(Intent.createChooser(pick,"Select Image From"));
+                startActivityForResult(chooser,GALLERY);
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode==GALLERY && resultCode==RESULT_OK)
+        {
+            Uri dataUri = data.getData();
+            StorageReference ref = mStorage.child("MyImages").child(dataUri.getLastPathSegment());
+            ref.putFile(dataUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Toast.makeText(getApplicationContext(),"Upload Successful",Toast.LENGTH_SHORT).show();
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(getApplicationContext(),"Upload Failed",Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 }
