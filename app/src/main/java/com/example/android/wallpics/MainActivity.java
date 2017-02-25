@@ -3,6 +3,7 @@ package com.example.android.wallpics;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -29,14 +30,25 @@ public class MainActivity extends AppCompatActivity {
 
 
     private static int GALLERY=1;
+    private int imgCount=0;
+
     private StorageReference mStorage;
+    private DatabaseReference mDatabase;
+
     private ProgressDialog progress;
+    private GridView mGridView;
+    private GridAdapter adapter;
+    private ArrayList<String> imageList= new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mStorage= FirebaseStorage.getInstance().getReference();
+        mDatabase=FirebaseDatabase.getInstance().getReferenceFromUrl("https://wallpics-ace58.firebaseio.com/MyImages");
+        adapter = new GridAdapter(this,imageList);
+        mGridView=(GridView) findViewById(R.id.gridview);
+        mGridView.setAdapter(adapter);
         progress= new ProgressDialog(this);
         Button uploadButton=(Button) findViewById(R.id.upload);
         uploadButton.setOnClickListener(new View.OnClickListener() {
@@ -63,8 +75,14 @@ public class MainActivity extends AppCompatActivity {
             ref.putFile(dataUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Toast.makeText(getApplicationContext(),"Upload Successful",Toast.LENGTH_SHORT).show();
+                    String downloadUrl = String.valueOf(taskSnapshot.getDownloadUrl());
+                    imgCount++;
+                    DatabaseReference dbRef=mDatabase.push();
+                    dbRef.setValue(downloadUrl);
+                    imageList.add(downloadUrl);
+                    mGridView.setAdapter(adapter);
                     progress.dismiss();
+                    Toast.makeText(getApplicationContext(),"Upload Successful",Toast.LENGTH_SHORT).show();
                 }
             });
         }
