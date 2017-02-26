@@ -6,14 +6,16 @@
     android:background="@android:color/darker_gray"
     tools:context="com.example.android.wallpics.MainActivity">
 
-   <GridView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/gridview"
-        android:numColumns="2" />
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="5dp"
         android:text="@string/upload_from_gallery"
         android:id="@+id/upload"/>
+   <GridView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+       android:layout_below="@id/upload"
+        android:id="@+id/gridview"
+        android:numColumns="2" />
     </RelativeLayout>

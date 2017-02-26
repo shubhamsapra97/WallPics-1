@@ -38,7 +38,7 @@ public class GridAdapter extends ArrayAdapter<String> {
         ImageView imageView = (ImageView) gridView.findViewById(R.id.image);
 
         Uri imageUri = Uri.parse(downloadUrl);
-        Picasso.with(getContext()).load(imageUri).into(imageView);
+        Picasso.with(getContext()).load(imageUri).placeholder(R.drawable.default_image).into(imageView);
         return gridView;
     }
 }
