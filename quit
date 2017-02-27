@@ -1,0 +1,47 @@
+[33mcommit 39b4c999b1f04865b3eae5440a1b6bf5c6201b53[m
+Author: rachit bhutani <rachitbhutani1998@gmail.com>
+Date:   Sun Feb 26 06:10:04 2017 +0530
+
+    upload button complete
+
+[33mcommit 5677a23361474cc343513d0da24734992c2cb761[m
+Author: rachit bhutani <rachitbhutani1998@gmail.com>
+Date:   Sat Feb 25 14:47:36 2017 +0530
+
+    upload to firebase almost done, retrieving has some problems
+
+[33mcommit 5c7245c837d75a9c4738c5024f8d238642248ba9[m
+Author: rachit bhutani <rachitbhutani1998@gmail.com>
+Date:   Fri Feb 24 22:57:47 2017 +0530
+
+    added placeholder image
+
+[33mcommit 4621b5c1b0f448dd45cea629440e79bc9e0d368d[m
+Author: rachit bhutani <rachitbhutani1998@gmail.com>
+Date:   Fri Feb 24 06:54:41 2017 +0530
+
+    Added progress bar for upload and removed onFailureListener
+
+[33mcommit bb826ef48c2e64998da2d6a8c01878db3f7b723e[m
+Author: rachit bhutani <rachitbhutani1998@gmail.com>
+Date:   Fri Feb 24 05:38:38 2017 +0530
+
+    added button yo upload images to firebase
+
+[33mcommit c0441834f4b4d044a79b60269187384e60cddc3d[m
+Author: rachit bhutani <rachitbhutani1998@gmail.com>
+Date:   Sun Feb 19 23:23:19 2017 +0530
+
+    sync of firebase changed, like share set buttons removed
+
+[33mcommit f8f5070b72fc42369da2f9b59822e0d2bbc7b1aa[m
+Author: rachit bhutani <rachitbhutani1998@gmail.com>
+Date:   Sat Feb 18 14:49:30 2017 +0530
+
+    removed extra buttons added drawables
+
+[33mcommit 11899962d7df3f56ef1c214938a7e9409ca11041[m
+Author: rachit bhutani <rachitbhutani1998@gmail.com>
+Date:   Sat Feb 18 10:51:59 2017 +0530
+
+    first commit

@@ -7,9 +7,14 @@ import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 import android.widget.VideoView;
@@ -27,6 +32,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -101,18 +107,25 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         mGridView.setAdapter(adapter);
-        Button uploadButton=(Button) findViewById(R.id.upload);
-        uploadButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent pick = new Intent(Intent.ACTION_PICK);
-                pick.setType("image/*");
-                Intent chooser = new Intent(Intent.createChooser(pick,"Select Image From"));
-                startActivityForResult(chooser,GALLERY);
-            }
-        });
+    }
 
-        mGridView.setAdapter(adapter);
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.home,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id=item.getItemId();
+        if(id==R.id.upload_menu)
+        {
+            Intent pick = new Intent(Intent.ACTION_PICK);
+            pick.setType("image/*");
+            Intent chooser = new Intent(Intent.createChooser(pick,"Select Image From"));
+            startActivityForResult(chooser,GALLERY);
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
