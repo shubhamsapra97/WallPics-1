@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +28,7 @@ public class GridAdapter extends ArrayAdapter<String> {
         super(context, 0,grid);
     }
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         View gridView = convertView;
         if (gridView == null) {
             gridView = LayoutInflater.from(getContext()).inflate(
@@ -35,10 +36,25 @@ public class GridAdapter extends ArrayAdapter<String> {
         }
         String downloadUrl = getItem(position);
 
-        ImageView imageView = (ImageView) gridView.findViewById(R.id.image);
+        final ImageView imageView = (ImageView) gridView.findViewById(R.id.image);
 
-        Uri imageUri = Uri.parse(downloadUrl);
+        final Uri imageUri = Uri.parse(downloadUrl);
         Picasso.with(getContext()).load(imageUri).placeholder(R.drawable.default_image).into(imageView);
+        final ImageView bigImage=(ImageView) convertView.findViewById(R.id.big_image);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i("ImageView", "onClick: image"+position+" Clicked");
+                return;
+            }
+        });
+        imageView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Log.i("ImageView", "onLongClick: image"+position+" LongClicked");
+                return true;
+            }
+        });
         return gridView;
     }
 }

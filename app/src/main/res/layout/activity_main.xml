@@ -3,9 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/darker_gray"
     tools:context="com.example.android.wallpics.MainActivity">
-
+<ImageView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:src="@drawable/back"
+    android:scaleType="centerCrop"/>
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,7 +19,13 @@
    <GridView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_margin="10dp"
         android:id="@+id/gridview"
         android:numColumns="2" />
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="30dp"
+        android:id="@+id/big_image"/>
 
     </RelativeLayout>
