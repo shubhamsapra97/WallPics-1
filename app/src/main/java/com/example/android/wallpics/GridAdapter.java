@@ -36,11 +36,10 @@ public class GridAdapter extends ArrayAdapter<String> {
         }
         String downloadUrl = getItem(position);
 
-        final ImageView imageView = (ImageView) gridView.findViewById(R.id.image);
+        final ImageView imageView = (ImageView) gridView.findViewById(R.id.imageView);
 
         final Uri imageUri = Uri.parse(downloadUrl);
         Picasso.with(getContext()).load(imageUri).placeholder(R.drawable.default_image).into(imageView);
-        final ImageView bigImage=(ImageView) convertView.findViewById(R.id.big_image);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

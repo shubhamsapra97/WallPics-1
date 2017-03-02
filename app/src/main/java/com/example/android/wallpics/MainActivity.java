@@ -94,6 +94,13 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
+                String url=dataSnapshot.getValue(String.class);
+                imageList.remove(url);
+                imgCount--;
+                StorageReference ref = mStorage.child("MyImages").child(imgCount+"");
+                ref.delete();
+                databaseImageCount.setValue(imgCount);
+                mGridView.setAdapter(adapter);
             }
 
             @Override
