@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
                 if (user != null) {
                     Log.d("Main Activity:", "onAuthStateChanged:signed_in:" + user.getUid());
                 } else {
-                    startActivity(new Intent(MainActivity.this,SignInActivity.class));
+                    startActivity(new Intent(MainActivity.this,SignInActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                     finish();
                     return;
                 }
@@ -153,7 +153,9 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(chooser,GALLERY);
                 return true;
             case R.id.sign_out:
+                mAuth.signOut();
                 startActivity(new Intent(MainActivity.this,SignInActivity.class));
+                finish();
                 return true;
         }
         return super.onOptionsItemSelected(item);
