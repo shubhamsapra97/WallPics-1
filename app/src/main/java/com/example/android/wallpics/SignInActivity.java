@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.LoginFilter;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -70,21 +71,44 @@ public class SignInActivity extends AppCompatActivity {
         signInBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email=emailText.getText().toString();
-                String pass=passText.getText().toString();
-                mAuth.signInWithEmailAndPassword(email,pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
-                            startActivity(new Intent(SignInActivity.this,MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                            finish();
-                        }
-                        if(!task.isSuccessful()){
-                            Toast.makeText(getApplicationContext(),"Sign In Failed",Toast.LENGTH_SHORT).show();
-                        }
+                logInProgress.setMessage("Signing In...");
+                logInProgress.show();
+                String email=emailText.getText().toString().trim();
+                String pass=passText.getText().toString().trim();
+                if(TextUtils.isEmpty(email)&&TextUtils.isEmpty(pass))
+                {
+                    Toast.makeText(SignInActivity.this, "Fill up the details to continue...", Toast.LENGTH_SHORT).show();
+                    logInProgress.dismiss();
+                }
+                else if (!TextUtils.isEmpty(email)&&TextUtils.isEmpty(pass))
+                {
+                    Toast.makeText(SignInActivity.this, "Enter your password in the required field...", Toast.LENGTH_SHORT).show();
+                    logInProgress.dismiss();
+                }
+                else if (!TextUtils.isEmpty(pass)&&TextUtils.isEmpty(email))
+                {
+                    Toast.makeText(SignInActivity.this, "Enter your email id in the required field...", Toast.LENGTH_SHORT).show();
+                    logInProgress.dismiss();
+                }
+                else
+                {
+                    mAuth.signInWithEmailAndPassword(email,pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if(task.isSuccessful()){
+                                logInProgress.dismiss();
+                                startActivity(new Intent(SignInActivity.this,MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                                finish();
+                            }
+                            if(!task.isSuccessful()){
+                                logInProgress.dismiss();
+                                Toast.makeText(getApplicationContext(),"Sign In Failed",Toast.LENGTH_SHORT).show();
+                            }
 
-                    }
-                });
+                        }
+                    });
+                }
+
             }
         });
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
