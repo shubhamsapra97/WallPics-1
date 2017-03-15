@@ -13,7 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -34,17 +34,16 @@ public class GridAdapter extends ArrayAdapter<String> {
             gridView = LayoutInflater.from(getContext()).inflate(
                     R.layout.grid_item, parent, false);
         }
-        String downloadUrl = getItem(position);
+        final String downloadUrl = getItem(position);
 
         final ImageView imageView = (ImageView) gridView.findViewById(R.id.imageView);
 
-        final Uri imageUri = Uri.parse(downloadUrl);
-        Picasso.with(getContext()).load(imageUri).placeholder(R.drawable.default_image).into(imageView);
+         final Uri imageUri = Uri.parse(downloadUrl);
+        Glide.with(getContext()).load(imageUri).placeholder(R.drawable.default_image).override(imageView.getDrawable().getIntrinsicWidth()*2,imageView.getDrawable().getIntrinsicHeight()*2).centerCrop().into(imageView);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("ImageView", "onClick: image"+position+" Clicked");
-                return;
+                Log.i("ImageView", "onClick: image"+position+" Clicked"+downloadUrl);
             }
         });
         imageView.setOnLongClickListener(new View.OnLongClickListener() {
