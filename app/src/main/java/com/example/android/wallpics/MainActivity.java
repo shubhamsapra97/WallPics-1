@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
@@ -103,9 +105,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 String url=dataSnapshot.getValue(String.class);
+                int count=imageList.indexOf(url);
                 imageList.remove(url);
                 imgCount--;
-                StorageReference ref = mStorage.child("MyImages").child(imgCount+"");
+                StorageReference ref = mStorage.child("MyImages").child(count+"");
                 ref.delete();
                 databaseImageCount.setValue(imgCount);
                 mGridView.setAdapter(adapter);
@@ -122,6 +125,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         mGridView.setAdapter(adapter);
+        mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent=new Intent(MainActivity.this,ImageActivity.class);
+                String url=imageList.get(position);
+                intent.putExtra("download",url);
+                startActivity(intent);
+                Log.e("This Activity", "CLick Click:  "+url);
+            }
+        });
     }
 
     @Override

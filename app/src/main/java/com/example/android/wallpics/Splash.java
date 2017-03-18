@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 
 public class Splash extends Activity {
-    private static final int SPLASH_TIME=5000;
+    private static final int SPLASH_TIME=2000;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

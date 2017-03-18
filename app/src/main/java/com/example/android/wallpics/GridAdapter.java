@@ -1,6 +1,7 @@
 package com.example.android.wallpics;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -41,23 +42,7 @@ public class GridAdapter extends ArrayAdapter<String> {
          final Uri imageUri = Uri.parse(downloadUrl);
 
         Glide.with(getContext()).load(imageUri).placeholder(R.drawable.default_image)
-                .override(imageView.getDrawable().getIntrinsicWidth()*2,imageView.getDrawable().getIntrinsicHeight()*2)
-                .centerCrop()
                 .into(imageView);
-
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.i("ImageView", "onClick: image"+position+" Clicked"+downloadUrl);
-            }
-        });
-        imageView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                Log.i("ImageView", "onLongClick: image"+position+" LongClicked");
-                return true;
-            }
-        });
         return gridView;
     }
 }
