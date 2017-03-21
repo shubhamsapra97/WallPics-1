@@ -26,7 +26,7 @@ public class GridAdapter extends ArrayAdapter<String> {
         final ImageView imageView = (ImageView) gridView.findViewById(R.id.imageView);
          final Uri imageUri = Uri.parse(downloadUrl);
 
-        Glide.with(getContext()).load(imageUri).placeholder(R.drawable.default_image)
+        Glide.with(getContext()).load(imageUri)
                 .into(imageView);
         return gridView;
     }
