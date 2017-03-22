@@ -1,7 +1,9 @@
 package com.example.android.wallpics;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,7 +16,8 @@ import android.widget.ProgressBar;
 import com.bumptech.glide.Glide;
 
 public class ImageActivity extends AppCompatActivity {
-    int navBarFlag=0;
+   
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
