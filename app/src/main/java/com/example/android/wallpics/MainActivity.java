@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private ProgressDialog progress;
     private GridView mGridView;
     private GridAdapter adapter;
-    private ArrayList<String> imageList= new ArrayList<>();
+    public ArrayList<String> imageList= new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +64,6 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     startActivity(new Intent(MainActivity.this,SignInActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                     finish();
-                    return;
                 }
             }
         };
@@ -131,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent=new Intent(MainActivity.this,ImageActivity.class);
                 String url=imageList.get(position);
                 intent.putExtra("download",url);
+                intent.putExtra("imageList", imageList);
                 startActivity(intent);
                 Log.e("This Activity", "CLick Click:  "+url);
             }

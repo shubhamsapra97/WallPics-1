@@ -16,7 +16,7 @@ import android.widget.ProgressBar;
 import com.bumptech.glide.Glide;
 
 public class ImageActivity extends AppCompatActivity {
-   
+
     @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
