@@ -4,27 +4,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.android.wallpics.ImageActivity">
-    <ImageSwitcher
+    <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="fitCenter"
-        android:id="@+id/big_image"
-        android:src="@drawable/default_image"
-        android:contentDescription="@string/full_screen_image"/>
+        android:id="@+id/full_image"
+        android:scaleType="fitCenter"/>
     <Button
-        android:layout_width="60dp"
-        android:layout_height="70dp"
-        android:textStyle="bold"
-        android:text="<"
-        android:id="@+id/pre"
-        android:textSize="40sp"
-        android:layout_gravity="center_vertical"/>
-    <Button
-        android:layout_width="60dp"
-        android:layout_height="70dp"
-        android:textStyle="bold"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
         android:text=">"
-        android:textSize="40sp"
-        android:id="@+id/next"
-        android:layout_gravity="center_vertical|right"/>
+        android:textSize="25sp"
+        android:layout_gravity="center_vertical|right"
+        android:layout_margin="5dp"
+        android:id="@+id/next"/>
 </FrameLayout>

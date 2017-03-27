@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                String url=dataSnapshot.getValue(String.class);
+                String url=dataSnapshot.getKey();
                 int count=imageList.indexOf(url);
                 imageList.remove(url);
                 imgCount--;
@@ -183,14 +183,14 @@ public class MainActivity extends AppCompatActivity {
             progress.setMessage("Uploading...");
             progress.show();
             Uri dataUri = data.getData();
+            imgCount++;
             StorageReference ref = mStorage.child("MyImages").child(imgCount+"");
             ref.putFile(dataUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     String downloadUrl = String.valueOf(taskSnapshot.getDownloadUrl());
-                    imgCount++;
                     databaseImageCount.setValue(imgCount);
-                    DatabaseReference dbRef=mDatabase.child("image"+imgCount);
+                    DatabaseReference dbRef=mDatabase.child(""+imgCount);
                     dbRef.setValue(downloadUrl);
                     progress.dismiss();
                     Toast.makeText(getApplicationContext(),"Upload Successful",Toast.LENGTH_SHORT).show();
