@@ -74,6 +74,18 @@ public class ImageActivity extends AppCompatActivity {
                 Glide.with(getApplicationContext()).load(imageUri).into(bigImage);
             }
         });
+        Button pre=(Button)findViewById(R.id.pre);
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (images != null) {
+                    i++;
+                    imageUri=Uri.parse(images.get(images.indexOf(url)-i));
+                    Log.i("ImageActivity: ", "onClick: "+i);
+                }
+                Glide.with(getApplicationContext()).load(imageUri).into(bigImage);
+            }
+        });
         Glide.with(getApplicationContext()).load(imageUri).into(bigImage);
         bigImage.setOnClickListener(new View.OnClickListener() {
             @Override
