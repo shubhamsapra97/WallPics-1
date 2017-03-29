@@ -15,7 +15,7 @@
         android:layout_marginBottom="25dp"
         android:orientation="horizontal">
     <Button
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:text="p"
@@ -24,7 +24,7 @@
         android:layout_gravity="center_vertical"
         android:id="@+id/pre"/>
     <Button
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:text="n"
