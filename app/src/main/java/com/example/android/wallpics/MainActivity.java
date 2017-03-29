@@ -132,7 +132,6 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("download",url);
                 intent.putExtra("imageList", imageList);
                 startActivity(intent);
-                Log.e("This Activity", "CLick Click:  "+url);
             }
         });
     }

@@ -45,7 +45,7 @@ public class ImageActivity extends AppCompatActivity {
         final ArrayList<String> images=getIntent().getExtras().getStringArrayList("imageList");
         final ImageView bigImage=(ImageView) findViewById(R.id.full_image);
         if (images != null) {
-            imageUri=Uri.parse(images.get(images.indexOf(url)));
+            imageUri=Uri.parse(url);
         }
         ProgressBar bar = new ProgressBar(this);
         bar.setVisibility(View.VISIBLE);
@@ -63,24 +63,26 @@ public class ImageActivity extends AppCompatActivity {
             }
         });
         Button next=(Button)findViewById(R.id.next);
+        next.setAlpha(0);
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (images != null) {
+                    imageUri=Uri.parse(images.get(images.indexOf(url)-i));
                     i++;
-                    imageUri=Uri.parse(images.get(images.indexOf(url)+i));
                     Log.i("ImageActivity: ", "onClick: "+i);
                 }
                 Glide.with(getApplicationContext()).load(imageUri).into(bigImage);
             }
         });
         Button pre=(Button)findViewById(R.id.pre);
-        next.setOnClickListener(new View.OnClickListener() {
+        pre.setAlpha(0);
+        pre.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (images != null) {
                     i++;
-                    imageUri=Uri.parse(images.get(images.indexOf(url)-i));
+                    imageUri=Uri.parse(images.get(images.indexOf(url)+i));
                     Log.i("ImageActivity: ", "onClick: "+i);
                 }
                 Glide.with(getApplicationContext()).load(imageUri).into(bigImage);
