@@ -1,11 +1,12 @@
 <resources>
-    <string name="app_name">Wallpics</string>
-    <string name="email_hint">Email...</string>
-    <string name="password">Password...</string>
+    <string name="app_name">WallPics</string>
+    <string name="email_hint">Email</string>
+    <string name="password">Password</string>
     <string name="log_out">Log Out</string>
     <string name="upload">Upload</string>
     <string name="sign_in">Sign In</string>
-    <string name="welcome">Welcome To wallpics!</string>
+    <string name="welcome">Welcome To WallPics!</string>
     <string name="full_screen_image">full screen image</string>
     <string name="big_image_des">This is the full screen image user clicked on</string>
+    <string name="sign_up">Sign Up</string>
 </resources>
