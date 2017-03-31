@@ -12,6 +12,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.database.DataSnapshot;
@@ -41,14 +42,16 @@ public class ImageActivity extends AppCompatActivity {
                         | View.SYSTEM_UI_FLAG_FULLSCREEN
                         | View.SYSTEM_UI_FLAG_IMMERSIVE);
         setContentView(R.layout.activity_image);
+
+
         url=getIntent().getExtras().getString("download");
         final ArrayList<String> images=getIntent().getExtras().getStringArrayList("imageList");
+
         final ImageView bigImage=(ImageView) findViewById(R.id.full_image);
         if (images != null) {
             imageUri=Uri.parse(url);
         }
-        ProgressBar bar = new ProgressBar(this);
-        bar.setVisibility(View.VISIBLE);
+
         databaseImageCount= FirebaseDatabase.getInstance().getReference().child("ImageCount");
         databaseImageCount.addValueEventListener(new ValueEventListener() {
             @Override
@@ -62,17 +65,19 @@ public class ImageActivity extends AppCompatActivity {
 
             }
         });
+
         Button next=(Button)findViewById(R.id.next);
         next.setAlpha(0);
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (images != null) {
-                    imageUri=Uri.parse(images.get(images.indexOf(url)-i));
-                    i++;
-                    Log.i("ImageActivity: ", "onClick: "+i);
+                if (images != null && (images.indexOf(url)-1 > 1 || images.indexOf(url)-1 < imgCount)) {
+                    url = images.get(images.indexOf(url) - 1);
+                    imageUri = Uri.parse(url);
+                    Glide.with(getApplicationContext()).load(imageUri).into(bigImage);
                 }
-                Glide.with(getApplicationContext()).load(imageUri).into(bigImage);
+                else
+                    Toast.makeText(ImageActivity.this, "Change your way, This is the first one here.", Toast.LENGTH_SHORT).show();
             }
         });
         Button pre=(Button)findViewById(R.id.pre);
@@ -81,11 +86,14 @@ public class ImageActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (images != null) {
-                    i++;
-                    imageUri=Uri.parse(images.get(images.indexOf(url)+i));
-                    Log.i("ImageActivity: ", "onClick: "+i);
+                    if(images.indexOf(url)+1>=0||images.indexOf(url)+2<imgCount)
+                    {
+                        url=images.get(images.indexOf(url)+1);
+                        imageUri=Uri.parse(url);
+                        Glide.with(getApplicationContext()).load(imageUri).into(bigImage);}
+                    else
+                        Toast.makeText(ImageActivity.this, "Change your way, This is the last one here.", Toast.LENGTH_SHORT).show();
                 }
-                Glide.with(getApplicationContext()).load(imageUri).into(bigImage);
             }
         });
         Glide.with(getApplicationContext()).load(imageUri).into(bigImage);
@@ -106,6 +114,5 @@ public class ImageActivity extends AppCompatActivity {
                 },3000);
             }
         });
-        bar.setVisibility(View.GONE);
     }
 }
