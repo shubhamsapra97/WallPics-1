@@ -3,10 +3,9 @@ package com.example.android.wallpics;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -37,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static int GALLERY=1;
     private Integer imgCount;
-    private Toolbar mToolBar;
+
 
     private FirebaseAuth mAuth;
     private AuthStateListener mAuthListener;
@@ -55,8 +54,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         progress= new ProgressDialog(this);
-        mToolBar =(Toolbar)findViewById(R.id.navBar);
-        setSupportActionBar(mToolBar);
+
         mAuth=FirebaseAuth.getInstance();
         mAuthListener=new AuthStateListener() {
             @Override
