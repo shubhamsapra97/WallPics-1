@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -26,8 +25,6 @@ import java.util.ArrayList;
 public class ImageActivity extends AppCompatActivity {
     Uri imageUri;
     String url;
-    int i=0;
-    private DatabaseReference databaseImageCount;
     Integer imgCount;
     @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
@@ -52,7 +49,7 @@ public class ImageActivity extends AppCompatActivity {
             imageUri=Uri.parse(url);
         }
 
-        databaseImageCount= FirebaseDatabase.getInstance().getReference().child("ImageCount");
+        DatabaseReference databaseImageCount = FirebaseDatabase.getInstance().getReference().child("ImageCount");
         databaseImageCount.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -71,7 +68,7 @@ public class ImageActivity extends AppCompatActivity {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (images != null && (images.indexOf(url)-1 > 1 || images.indexOf(url)-1 < imgCount)) {
+                if (images != null && (images.indexOf(url) >0)) {
                     url = images.get(images.indexOf(url) - 1);
                     imageUri = Uri.parse(url);
                     Glide.with(getApplicationContext()).load(imageUri).into(bigImage);
@@ -86,7 +83,7 @@ public class ImageActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (images != null) {
-                    if(images.indexOf(url)+1>=0||images.indexOf(url)+2<imgCount)
+                    if(images.indexOf(url)<imgCount-1)
                     {
                         url=images.get(images.indexOf(url)+1);
                         imageUri=Uri.parse(url);

@@ -8,29 +8,31 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/full_image"
-        android:scaleType="fitCenter"/>
+        android:scaleType="fitCenter"
+        android:contentDescription="@string/big_image_des" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="25dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        style="?android:buttonBarStyle">
     <Button
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:text="p"
         android:alpha="0"
         android:textSize="25sp"
         android:layout_gravity="center_vertical"
-        android:id="@+id/pre"/>
+        android:id="@+id/next"
+        style="?android:buttonBarButtonStyle"/>
     <Button
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:text="n"
         android:alpha="0"
         android:textSize="25sp"
         android:layout_gravity="center_vertical|right"
-        android:id="@+id/next"/>
+        android:id="@+id/pre"
+        style="?android:buttonBarButtonStyle"/>
     </LinearLayout>
 </FrameLayout>
