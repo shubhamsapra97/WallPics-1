@@ -1,8 +1,10 @@
 package com.example.android.wallpics;
 
+import android.annotation.TargetApi;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -29,6 +31,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -149,9 +152,14 @@ public class MainActivity extends AppCompatActivity {
         mAuth.removeAuthStateListener(mAuthListener);
     }
 
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.home,menu);
+        String uId=mAuth.getCurrentUser().getUid();
+        MenuItem upload=menu.findItem(R.id.upload_menu);
+        if(Objects.equals(uId, "4sQRlPyREKYE91zMNnCi2dW8sVH3"))
+            upload.setVisible(true);
         return true;
     }
 

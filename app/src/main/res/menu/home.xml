@@ -5,8 +5,9 @@
     tools:context="com.example.android.wallpics.MainActivity">
     <item android:id="@+id/upload_menu"
         android:title="@string/upload"
-        app:showAsAction="always"
-        android:icon="@drawable/ic_file_upload_white_24dp"></item>
+        android:visible="false"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_file_upload_white_24dp"/>
     <item
         android:id="@+id/sign_out"
         android:title="@string/log_out"
