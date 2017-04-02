@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.LoginFilter;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -33,15 +32,12 @@ public class SignInActivity extends AppCompatActivity {
 
     private EditText emailText;
     private EditText passText;
-    private Button signInBtn;
     private ProgressDialog logInProgress;
 
     private GoogleApiClient mGoogleApiClient;
-    private SignInButton mGoogleBtn;
     private static final int RC_SIGN_IN=1;
 
     private FirebaseAuth mAuth;
-    private AuthStateListener mAuthListener;
 
     private static final String TAG="SignInActivity";
     @Override
@@ -50,15 +46,14 @@ public class SignInActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_in);
         mAuth=FirebaseAuth.getInstance();
         logInProgress=new ProgressDialog(this);
-        mAuthListener=new AuthStateListener() {
+        AuthStateListener mAuthListener = new AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     Log.d("SignIn Activity:", "onAuthStateChanged:signed_in:" + user.getUid());
-                    startActivity(new Intent(SignInActivity.this,MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                    startActivity(new Intent(SignInActivity.this, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                     finish();
-                } else {
                 }
             }
         };
@@ -66,8 +61,8 @@ public class SignInActivity extends AppCompatActivity {
 
         emailText=(EditText) findViewById(R.id.email_field);
         passText=(EditText) findViewById(R.id.password_field);
-        mGoogleBtn=(SignInButton) findViewById(R.id.google_btn);
-        signInBtn=(Button) findViewById(R.id.sign_in_button);
+        SignInButton mGoogleBtn = (SignInButton) findViewById(R.id.google_btn);
+        Button signInBtn = (Button) findViewById(R.id.sign_in_button);
         signInBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -111,6 +106,14 @@ public class SignInActivity extends AppCompatActivity {
 
             }
         });
+        Button signUp=(Button) findViewById(R.id.sign_up_button);
+        signUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(SignInActivity.this,SignUpActivity.class));
+            }
+        });
+
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()

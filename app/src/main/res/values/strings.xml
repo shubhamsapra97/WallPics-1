@@ -9,4 +9,7 @@
     <string name="full_screen_image">full screen image</string>
     <string name="big_image_des">This is the full screen image user clicked on</string>
     <string name="sign_up">Sign Up</string>
+    <string name="enter_your_name">Enter your name</string>
+    <string name="enter_your_email">Enter Your Email</string>
+    <string name="enter_your_password">Enter your Password</string>
 </resources>
