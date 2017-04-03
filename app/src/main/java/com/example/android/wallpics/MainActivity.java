@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private StorageReference mStorage;
     private DatabaseReference mDatabase;
     private DatabaseReference databaseImageCount;
+    private FirebaseUser user;
 
     private ProgressDialog progress;
     private GridView mGridView;
@@ -62,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
         mAuthListener=new AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
+                user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     Log.d("Main Activity:", "onAuthStateChanged:signed_in:" + user.getUid());
                 } else {
@@ -156,10 +157,21 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.home,menu);
-        String uId=mAuth.getCurrentUser().getUid();
-        MenuItem upload=menu.findItem(R.id.upload_menu);
-        if(Objects.equals(uId, "4sQRlPyREKYE91zMNnCi2dW8sVH3"))
-            upload.setVisible(true);
+        final MenuItem upload=menu.findItem(R.id.upload_menu);
+        mAuth.addAuthStateListener(new AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user1= mAuth.getCurrentUser();
+                if(user1!=null){
+                 if(Objects.equals(user1.getUid(),"4sQRlPyREKYE91zMNnCi2dW8sVH3"))
+                     upload.setVisible(true);
+                }
+                else {
+                    startActivity(new Intent(MainActivity.this,SignInActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                    finish();
+                }
+            }
+        });
         return true;
     }
 
