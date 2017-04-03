@@ -35,17 +35,18 @@ public class SignInActivity extends AppCompatActivity {
     private ProgressDialog logInProgress;
 
     private GoogleApiClient mGoogleApiClient;
-    private static final int RC_SIGN_IN=1;
+    private static final int RC_SIGN_IN = 1;
 
     private FirebaseAuth mAuth;
 
-    private static final String TAG="SignInActivity";
+    private static final String TAG = "SignInActivity";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
-        mAuth=FirebaseAuth.getInstance();
-        logInProgress=new ProgressDialog(this);
+        mAuth = FirebaseAuth.getInstance();
+        logInProgress = new ProgressDialog(this);
         AuthStateListener mAuthListener = new AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -59,8 +60,8 @@ public class SignInActivity extends AppCompatActivity {
         };
         mAuth.addAuthStateListener(mAuthListener);
 
-        emailText=(EditText) findViewById(R.id.email_field);
-        passText=(EditText) findViewById(R.id.password_field);
+        emailText = (EditText) findViewById(R.id.email_field);
+        passText = (EditText) findViewById(R.id.password_field);
         SignInButton mGoogleBtn = (SignInButton) findViewById(R.id.google_btn);
         Button signInBtn = (Button) findViewById(R.id.sign_in_button);
         signInBtn.setOnClickListener(new View.OnClickListener() {
@@ -68,40 +69,33 @@ public class SignInActivity extends AppCompatActivity {
             public void onClick(View v) {
                 logInProgress.setMessage("Signing In...");
                 logInProgress.show();
-                String email=emailText.getText().toString().trim();
-                String pass=passText.getText().toString().trim();
-                if(TextUtils.isEmpty(email)&&TextUtils.isEmpty(pass))
-                {
+                String email = emailText.getText().toString().trim();
+                String pass = passText.getText().toString().trim();
+                if (TextUtils.isEmpty(email) && TextUtils.isEmpty(pass)) {
                     Toast.makeText(SignInActivity.this, "Fill up the details to continue...", Toast.LENGTH_SHORT).show();
                     logInProgress.dismiss();
-                }
-                else if (!TextUtils.isEmpty(email)&&TextUtils.isEmpty(pass))
-                {
+                } else if (!TextUtils.isEmpty(email) && TextUtils.isEmpty(pass)) {
                     Toast.makeText(SignInActivity.this, "Enter your password in the required field...", Toast.LENGTH_SHORT).show();
                     logInProgress.dismiss();
-                }
-                else if (!TextUtils.isEmpty(pass)&&TextUtils.isEmpty(email))
-                {
+                } else if (!TextUtils.isEmpty(pass) && TextUtils.isEmpty(email)) {
                     Toast.makeText(SignInActivity.this, "Enter your email id in the required field...", Toast.LENGTH_SHORT).show();
                     logInProgress.dismiss();
-                }
-                else
-                {
-                    mAuth.signInWithEmailAndPassword(email,pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                } else {
+                    mAuth.signInWithEmailAndPassword(email, pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
-                            if(task.isSuccessful()){
+                            if (task.isSuccessful()) {
                                 logInProgress.dismiss();
-                                startActivity(new Intent(SignInActivity.this,MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                                startActivity(new Intent(SignInActivity.this, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                                 finish();
-                                FirebaseUser user=mAuth.getCurrentUser();
+                                FirebaseUser user = mAuth.getCurrentUser();
                                 if (user != null) {
-                                    Toast.makeText(SignInActivity.this, "Welcome to WallPics, "+user.getDisplayName()+"!", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(SignInActivity.this, "Welcome to WallPics, " + user.getDisplayName() + "!", Toast.LENGTH_SHORT).show();
                                 }
                             }
-                            if(!task.isSuccessful()){
+                            if (!task.isSuccessful()) {
                                 logInProgress.dismiss();
-                                Toast.makeText(getApplicationContext(),"Sign In Failed",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "Sign In Failed", Toast.LENGTH_SHORT).show();
                             }
 
                         }
@@ -110,11 +104,11 @@ public class SignInActivity extends AppCompatActivity {
 
             }
         });
-        Button signUp=(Button) findViewById(R.id.sign_up_button);
+        Button signUp = (Button) findViewById(R.id.sign_up_button);
         signUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(SignInActivity.this,SignUpActivity.class));
+                startActivity(new Intent(SignInActivity.this, SignUpActivity.class));
             }
         });
 
@@ -122,12 +116,12 @@ public class SignInActivity extends AppCompatActivity {
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
-        mGoogleApiClient=new GoogleApiClient.Builder(this).enableAutoManage(this, new GoogleApiClient.OnConnectionFailedListener() {
+        mGoogleApiClient = new GoogleApiClient.Builder(this).enableAutoManage(this, new GoogleApiClient.OnConnectionFailedListener() {
             @Override
             public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
                 Toast.makeText(SignInActivity.this, "Check Your Connection and try again later...", Toast.LENGTH_SHORT).show();
             }
-        }).addApi(Auth.GOOGLE_SIGN_IN_API,gso).build();
+        }).addApi(Auth.GOOGLE_SIGN_IN_API, gso).build();
         mGoogleBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -148,7 +142,6 @@ public class SignInActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             if (result.isSuccess()) {
@@ -161,6 +154,7 @@ public class SignInActivity extends AppCompatActivity {
             }
         }
     }
+
     private void firebaseAuthWithGoogle(final GoogleSignInAccount acct) {
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
 
@@ -173,17 +167,14 @@ public class SignInActivity extends AppCompatActivity {
                         logInProgress.dismiss();
 
                         if (task.isSuccessful()) {
-                            startActivity(new Intent(SignInActivity.this,MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                            startActivity(new Intent(SignInActivity.this, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                             finish();
-                            Toast.makeText(SignInActivity.this,"Welcome to WallPics, "+acct.getDisplayName()+"!",Toast.LENGTH_SHORT).show();
-                        }
-                        else
-                        {
+                            Toast.makeText(SignInActivity.this, "Welcome to WallPics, " + acct.getDisplayName() + "!", Toast.LENGTH_SHORT).show();
+                        } else {
                             Log.w(TAG, "signInWithCredential", task.getException());
                             Toast.makeText(SignInActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                         }
-                        // ...
                     }
                 });
     }

@@ -16,4 +16,6 @@
     <string name="empty_signing_up">You need to fill up all the details</string>
     <string name="signing_up_mismatch">Your Passwords Doesn\'t Match</string>
     <string name="signing_up_message">Signing You Up...</string>
+    <string name="splash_image">Splash Image</string>
+    <string name="grid_image">grid image</string>
 </resources>

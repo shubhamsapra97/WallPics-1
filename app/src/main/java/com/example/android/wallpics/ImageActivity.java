@@ -26,6 +26,7 @@ public class ImageActivity extends AppCompatActivity {
     Uri imageUri;
     String url;
     Integer imgCount;
+
     @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,12 +42,12 @@ public class ImageActivity extends AppCompatActivity {
         setContentView(R.layout.activity_image);
 
 
-        url=getIntent().getExtras().getString("download");
-        final ArrayList<String> images=getIntent().getExtras().getStringArrayList("imageList");
+        url = getIntent().getExtras().getString("download");
+        final ArrayList<String> images = getIntent().getExtras().getStringArrayList("imageList");
 
-        final ImageView bigImage=(ImageView) findViewById(R.id.full_image);
+        final ImageView bigImage = (ImageView) findViewById(R.id.full_image);
         if (images != null) {
-            imageUri=Uri.parse(url);
+            imageUri = Uri.parse(url);
         }
 
         DatabaseReference databaseImageCount = FirebaseDatabase.getInstance().getReference().child("ImageCount");
@@ -54,7 +55,7 @@ public class ImageActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 imgCount = dataSnapshot.getValue(Integer.class);
-                Log.i("ImageActivity: ", "onDataChange: "+imgCount);
+                Log.i("ImageActivity: ", "onDataChange: " + imgCount);
             }
 
             @Override
@@ -63,32 +64,30 @@ public class ImageActivity extends AppCompatActivity {
             }
         });
 
-        Button next=(Button)findViewById(R.id.next);
+        Button next = (Button) findViewById(R.id.next);
         next.setAlpha(0);
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (images != null && (images.indexOf(url) >0)) {
+                if (images != null && (images.indexOf(url) > 0)) {
                     url = images.get(images.indexOf(url) - 1);
                     imageUri = Uri.parse(url);
                     Glide.with(getApplicationContext()).load(imageUri).into(bigImage);
-                }
-                else
+                } else
                     Toast.makeText(ImageActivity.this, "Change your way, This is the first one here.", Toast.LENGTH_SHORT).show();
             }
         });
-        Button pre=(Button)findViewById(R.id.pre);
+        Button pre = (Button) findViewById(R.id.pre);
         pre.setAlpha(0);
         pre.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (images != null) {
-                    if(images.indexOf(url)<imgCount-1)
-                    {
-                        url=images.get(images.indexOf(url)+1);
-                        imageUri=Uri.parse(url);
-                        Glide.with(getApplicationContext()).load(imageUri).into(bigImage);}
-                    else
+                    if (images.indexOf(url) < imgCount - 1) {
+                        url = images.get(images.indexOf(url) + 1);
+                        imageUri = Uri.parse(url);
+                        Glide.with(getApplicationContext()).load(imageUri).into(bigImage);
+                    } else
                         Toast.makeText(ImageActivity.this, "Change your way, This is the last one here.", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -108,7 +107,7 @@ public class ImageActivity extends AppCompatActivity {
                                         | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
                                         | View.SYSTEM_UI_FLAG_IMMERSIVE);
                     }
-                },3000);
+                }, 3000);
             }
         });
     }

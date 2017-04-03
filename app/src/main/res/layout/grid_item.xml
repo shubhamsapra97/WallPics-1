@@ -11,5 +11,5 @@
         android:layout_margin="1dp"
         android:background="#33000000"
         android:scaleType="centerInside"
-        android:src="@drawable/default_image"/>
+        android:contentDescription="@string/grid_image" />
 </LinearLayout>

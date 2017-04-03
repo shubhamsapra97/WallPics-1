@@ -7,13 +7,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+
 import com.bumptech.glide.Glide;
+
 import java.util.ArrayList;
 
 public class GridAdapter extends ArrayAdapter<String> {
     public GridAdapter(Context context, ArrayList<String> grid) {
-        super(context, 0,grid);
+        super(context, 0, grid);
     }
+
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         View gridView = convertView;
@@ -24,7 +27,7 @@ public class GridAdapter extends ArrayAdapter<String> {
         final String downloadUrl = getItem(position);
 
         final ImageView imageView = (ImageView) gridView.findViewById(R.id.imageView);
-         final Uri imageUri = Uri.parse(downloadUrl);
+        final Uri imageUri = Uri.parse(downloadUrl);
 
         Glide.with(getContext()).load(imageUri)
                 .into(imageView);
