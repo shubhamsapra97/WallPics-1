@@ -94,6 +94,10 @@ public class SignInActivity extends AppCompatActivity {
                                 logInProgress.dismiss();
                                 startActivity(new Intent(SignInActivity.this,MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                                 finish();
+                                FirebaseUser user=mAuth.getCurrentUser();
+                                if (user != null) {
+                                    Toast.makeText(SignInActivity.this, "Welcome to WallPics, "+user.getDisplayName()+"!", Toast.LENGTH_SHORT).show();
+                                }
                             }
                             if(!task.isSuccessful()){
                                 logInProgress.dismiss();
@@ -157,7 +161,7 @@ public class SignInActivity extends AppCompatActivity {
             }
         }
     }
-    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
+    private void firebaseAuthWithGoogle(final GoogleSignInAccount acct) {
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
@@ -171,6 +175,7 @@ public class SignInActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             startActivity(new Intent(SignInActivity.this,MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                             finish();
+                            Toast.makeText(SignInActivity.this,"Welcome to WallPics, "+acct.getDisplayName()+"!",Toast.LENGTH_SHORT).show();
                         }
                         else
                         {
