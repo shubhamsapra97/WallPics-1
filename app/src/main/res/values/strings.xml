@@ -13,4 +13,7 @@
     <string name="enter_your_email">Enter Your Email</string>
     <string name="enter_your_password">Enter Your Password</string>
     <string name="confirm_your_password">Confirm Your Password</string>
+    <string name="empty_signing_up">You need to fill up all the details</string>
+    <string name="signing_up_mismatch">Your Passwords Doesn\'t Match</string>
+    <string name="signing_up_message">Signing You Up...</string>
 </resources>
