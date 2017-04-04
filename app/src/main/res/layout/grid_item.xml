@@ -9,7 +9,7 @@
         android:layout_height="150dp"
         android:id="@+id/imageView"
         android:layout_margin="1dp"
-        android:background="#33000000"
-        android:scaleType="centerInside"
+        android:background="@color/colorPrimaryDark"
+        android:scaleType="centerCrop"
         android:contentDescription="@string/grid_image" />
 </LinearLayout>
