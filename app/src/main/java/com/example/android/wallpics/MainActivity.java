@@ -1,10 +1,8 @@
 package com.example.android.wallpics;
 
-import android.annotation.TargetApi;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -31,7 +29,6 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -59,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         progress = new ProgressDialog(this);
 
-        mAuth = FirebaseAuth.getInstance();
+        mAuth=FirebaseAuth.getInstance();
         mAuthListener = new AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -153,7 +150,6 @@ public class MainActivity extends AppCompatActivity {
         mAuth.removeAuthStateListener(mAuthListener);
     }
 
-    @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.home, menu);
@@ -163,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user1 = mAuth.getCurrentUser();
                 if (user1 != null) {
-                    if (Objects.equals(user1.getUid(), "4sQRlPyREKYE91zMNnCi2dW8sVH3"))
+                    if (user1.getUid().equals("4sQRlPyREKYE91zMNnCi2dW8sVH3"))
                         upload.setVisible(true);
                 } else {
                     startActivity(new Intent(MainActivity.this, SignInActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));

@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.example.android.wallpics.ImageActivity">
     <ImageView
         android:layout_width="match_parent"
@@ -13,8 +14,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="25dp"
         android:orientation="horizontal"
+        android:descendantFocusability="beforeDescendants"
         style="?android:buttonBarStyle">
     <Button
         android:layout_width="match_parent"
@@ -34,5 +35,38 @@
         android:layout_gravity="center_vertical|right"
         android:id="@+id/pre"
         style="?android:buttonBarButtonStyle"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@android:color/white"
+        tools:elevation="5dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginBottom="100dp"
+        tools:targetApi="lollipop">
+        <com.like.LikeButton
+            app:icon_type="star"
+            app:icon_size="30dp"
+            android:paddingTop="12dp"
+            android:id="@+id/star_button"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="50dp"/>
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:src="@drawable/ic_share_black_24dp"
+            android:paddingBottom="2dp"
+            android:background="?android:selectableItemBackground"
+            android:contentDescription="@string/image_share_button" />
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:src="@drawable/ic_wallpaper_black_24dp"
+            android:background="?android:selectableItemBackground"/>
     </LinearLayout>
 </FrameLayout>

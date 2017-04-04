@@ -18,4 +18,6 @@
     <string name="signing_up_message">Signing You Up...</string>
     <string name="splash_image">Splash Image</string>
     <string name="grid_image">grid image</string>
+    <string name="like">like button</string>
+    <string name="image_share_button">image share button</string>
 </resources>
