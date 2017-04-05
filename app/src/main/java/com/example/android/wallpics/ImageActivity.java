@@ -91,22 +91,22 @@ public class ImageActivity extends AppCompatActivity {
             }
         });
         Glide.with(getApplicationContext()).load(imageUri).into(bigImage);
-        bigImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        getWindow().getDecorView().setSystemUiVisibility(
-                                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
-                                        | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
-                                        | View.SYSTEM_UI_FLAG_IMMERSIVE);
-                    }
-                }, 3000);
-            }
-        });
+//        bigImage.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                new Handler().postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        getWindow().getDecorView().setSystemUiVisibility(
+//                                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+//                                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+//                                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+//                                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
+//                                        | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
+//                                        | View.SYSTEM_UI_FLAG_IMMERSIVE);
+//                    }
+//                }, 3000);
+//            }
+//        });
     }
 }
