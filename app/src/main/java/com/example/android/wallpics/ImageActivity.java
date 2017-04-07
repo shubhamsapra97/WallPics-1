@@ -1,7 +1,5 @@
 package com.example.android.wallpics;
 
-import android.annotation.TargetApi;
-import android.app.DownloadManager;
 import android.app.WallpaperManager;
 import android.content.Intent;
 import android.graphics.Bitmap;
