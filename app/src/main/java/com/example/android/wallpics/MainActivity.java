@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -44,7 +46,8 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseReference mDatabase;
     private DatabaseReference databaseImageCount;
     private FirebaseUser user;
-
+    private DrawerLayout mDrawerLayout;
+    private ActionBarDrawerToggle mToggle;
     private ProgressDialog progress;
     private GridView mGridView;
     private GridAdapter adapter;
@@ -55,6 +58,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         progress = new ProgressDialog(this);
+        mDrawerLayout = (DrawerLayout)findViewById(R.id.drawerLayout);
+        mToggle = new ActionBarDrawerToggle(this,mDrawerLayout,R.string.open,R.string.close);
+        mDrawerLayout.addDrawerListener(mToggle);
+        mToggle.syncState();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mAuth=FirebaseAuth.getInstance();
         mAuthListener = new AuthStateListener() {
@@ -137,8 +145,28 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item){
+            int id = item.getItemId();
+            switch (id) {
+                case R.id.upload_menu:
+                    Intent pick = new Intent(Intent.ACTION_PICK);
+                    pick.setType("image/*");
+                    Intent chooser = new Intent(Intent.createChooser(pick, "Select Image From"));
+                    startActivityForResult(chooser, GALLERY);
+                    return true;
+                case R.id.sign_out:
+                    mAuth.signOut();
+                    startActivity(new Intent(MainActivity.this, SignInActivity.class));
+                    finish();
+                    return true;
+            }
+            if(mToggle.onOptionsItemSelected(item)){
+                return true;
+            }
+            return super.onOptionsItemSelected(item);
+        }
 
-    @Override
     protected void onStart() {
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
@@ -170,24 +198,6 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        switch (id) {
-            case R.id.upload_menu:
-                Intent pick = new Intent(Intent.ACTION_PICK);
-                pick.setType("image/*");
-                Intent chooser = new Intent(Intent.createChooser(pick, "Select Image From"));
-                startActivityForResult(chooser, GALLERY);
-                return true;
-            case R.id.sign_out:
-                mAuth.signOut();
-                startActivity(new Intent(MainActivity.this, SignInActivity.class));
-                finish();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, final Intent data) {

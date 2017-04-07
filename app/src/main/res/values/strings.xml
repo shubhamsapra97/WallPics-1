@@ -20,4 +20,6 @@
     <string name="grid_image">grid image</string>
     <string name="like">like button</string>
     <string name="image_share_button">image share button</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
 </resources>
