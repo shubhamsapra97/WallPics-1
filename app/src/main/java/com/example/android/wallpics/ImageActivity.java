@@ -1,8 +1,14 @@
 package com.example.android.wallpics;
 
 import android.annotation.TargetApi;
+import android.app.DownloadManager;
+import android.app.WallpaperManager;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,6 +16,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -20,12 +27,19 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.lang.annotation.Target;
 import java.util.ArrayList;
 
 public class ImageActivity extends AppCompatActivity {
     Uri imageUri;
     String url;
     Integer imgCount;
+
+    private static final String TAG="Image Activity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +116,7 @@ public class ImageActivity extends AppCompatActivity {
             }
         });
         Glide.with(getApplicationContext()).load(imageUri).into(bigImage);
+        Log.i(TAG, "onCreate: "+imageUri);
         bigImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -129,5 +144,50 @@ public class ImageActivity extends AppCompatActivity {
                 }, 3000);
             }
         });
+        ImageButton share=(ImageButton) findViewById(R.id.share_button);
+        share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i(TAG, "onClick: shared");
+            }
+        });
+        ImageButton download=(ImageButton) findViewById(R.id.download);
+        download.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bitmap bitmap=BitmapFactory.decodeFile(imageUri.getPath());
+                File folder = new File(Environment.getExternalStorageDirectory()+
+                        "/WallPics/");
+                if(!folder.exists())
+                    folder.mkdir();
+                File image= null;
+                if (images != null)
+                    image = new File(folder, "WallPics" + images.indexOf(url) + ".jpg");
+                try {
+                    FileOutputStream fileOS=new FileOutputStream(image);
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOS);
+                    fileOS.flush();
+                    fileOS.close();
+                    Toast.makeText(ImageActivity.this, "Image Downloaded Successfully", Toast.LENGTH_SHORT).show();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+        ImageButton setButton=(ImageButton) findViewById(R.id.set_button);
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.KITKAT){
+        setButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                WallpaperManager manager=WallpaperManager.getInstance(getApplicationContext());
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                 Intent setWall=new Intent(manager.getCropAndSetWallpaperIntent(Uri.parse(url)));
+                    startActivity(Intent.createChooser(setWall,"Set as:"));
+                }
+            }
+        });}
+        else
+            setButton.setVisibility(View.GONE);
     }
 }
