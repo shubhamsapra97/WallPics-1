@@ -26,10 +26,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.lang.annotation.Target;
 import java.util.ArrayList;
 
 public class ImageActivity extends AppCompatActivity {
