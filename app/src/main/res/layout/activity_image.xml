@@ -51,6 +51,8 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:background="@android:color/white"
+            android:alpha="0.5"
+            android:id="@+id/buttons"
             android:descendantFocusability="blocksDescendants"
             style="?android:buttonBarStyle">
             <ImageButton

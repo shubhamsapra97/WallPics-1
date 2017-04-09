@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,6 +19,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -148,13 +150,21 @@ public class ImageActivity extends AppCompatActivity {
                 }, 3000);
             }
         });
-
-
         ImageButton share=(ImageButton) findViewById(R.id.share_button);
         share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i(TAG, "onClick: shared");
+                Intent shareIntent=new Intent(Intent.ACTION_SEND);
+                shareIntent.setType("*");
+                try {
+                    Bitmap bmp=BitmapFactory.decodeStream(new URL(url).openConnection().getInputStream());
+                    String path= MediaStore.Images.Media.insertImage(getContentResolver(),bmp,"",null);
+                    shareIntent.putExtra(Intent.ACTION_ATTACH_DATA,path);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+//                shareIntent.putExtra(Intent.ACTION_ATTACH_DATA, imageUri);
+                startActivity(new Intent(Intent.createChooser(shareIntent,"Share Via")));
             }
         });
         ImageButton download=(ImageButton) findViewById(R.id.download);
@@ -162,15 +172,8 @@ public class ImageActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(ImageActivity.this, "Downloading...", Toast.LENGTH_SHORT).show();
-                File file=new File(Environment.getExternalStorageDirectory(),"/WallPics/");
-                if(!file.exists())
-                    file.mkdir();
+                DownloadManager.Request download=downloadImage();
                 DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
-                DownloadManager.Request download=new DownloadManager.Request(imageUri);
-                download.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE| DownloadManager.Request.NETWORK_WIFI);
-                download.setAllowedOverRoaming(true);
-                download.allowScanningByMediaScanner();
-                download.setDestinationInExternalPublicDir("/WallPics","Image"+System.currentTimeMillis()+".jpg");
                 download.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
                 manager.enqueue(download);
             }
@@ -189,5 +192,19 @@ public class ImageActivity extends AppCompatActivity {
         });}
         else
             setButton.setVisibility(View.GONE);
+
+    }
+
+    private DownloadManager.Request downloadImage()
+    {
+        File file=new File(Environment.getExternalStorageDirectory(),"/WallPics/");
+        if(!file.exists())
+            file.mkdir();
+        DownloadManager.Request download=new DownloadManager.Request(imageUri);
+        download.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE| DownloadManager.Request.NETWORK_WIFI);
+        download.setAllowedOverRoaming(true);
+        download.allowScanningByMediaScanner();
+        download.setDestinationInExternalPublicDir("/WallPics","Image"+System.currentTimeMillis()+".jpg");
+        return download;
     }
 }
