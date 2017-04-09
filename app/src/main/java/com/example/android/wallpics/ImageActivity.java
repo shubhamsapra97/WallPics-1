@@ -1,6 +1,8 @@
 package com.example.android.wallpics;
 
+import android.app.DownloadManager;
 import android.app.WallpaperManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -28,6 +30,10 @@ import com.google.firebase.database.ValueEventListener;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
+import java.sql.Time;
 import java.util.ArrayList;
 
 public class ImageActivity extends AppCompatActivity {
@@ -113,6 +119,8 @@ public class ImageActivity extends AppCompatActivity {
         });
         Glide.with(getApplicationContext()).load(imageUri).into(bigImage);
         Log.i(TAG, "onCreate: "+imageUri);
+
+
         bigImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -140,6 +148,8 @@ public class ImageActivity extends AppCompatActivity {
                 }, 3000);
             }
         });
+
+
         ImageButton share=(ImageButton) findViewById(R.id.share_button);
         share.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -151,24 +161,18 @@ public class ImageActivity extends AppCompatActivity {
         download.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Bitmap bitmap=BitmapFactory.decodeFile(imageUri.getPath());
-                File folder = new File(Environment.getExternalStorageDirectory()+
-                        "/WallPics/");
-                if(!folder.exists())
-                    folder.mkdir();
-                File image= null;
-                if (images != null)
-                    image = new File(folder, "WallPics" + images.indexOf(url) + ".jpg");
-                try {
-                    FileOutputStream fileOS=new FileOutputStream(image);
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOS);
-                    fileOS.flush();
-                    fileOS.close();
-                    Toast.makeText(ImageActivity.this, "Image Downloaded Successfully", Toast.LENGTH_SHORT).show();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
+                Toast.makeText(ImageActivity.this, "Downloading...", Toast.LENGTH_SHORT).show();
+                File file=new File(Environment.getExternalStorageDirectory(),"/WallPics/");
+                if(!file.exists())
+                    file.mkdir();
+                DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+                DownloadManager.Request download=new DownloadManager.Request(imageUri);
+                download.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE| DownloadManager.Request.NETWORK_WIFI);
+                download.setAllowedOverRoaming(true);
+                download.allowScanningByMediaScanner();
+                download.setDestinationInExternalPublicDir("/WallPics","Image"+System.currentTimeMillis()+".jpg");
+                download.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+                manager.enqueue(download);
             }
         });
         ImageButton setButton=(ImageButton) findViewById(R.id.set_button);
