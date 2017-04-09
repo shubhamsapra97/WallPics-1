@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
         @Override
-        public boolean onOptionsItemSelected(MenuItem item){
+        public boolean onOptionsItemSelected(MenuItem item) {
             int id = item.getItemId();
             switch (id) {
                 case R.id.upload_menu:
@@ -160,10 +160,7 @@ public class MainActivity extends AppCompatActivity {
                     finish();
                     return true;
             }
-            if(mToggle.onOptionsItemSelected(item)){
-                return true;
-            }
-            return super.onOptionsItemSelected(item);
+            return mToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
         }
 
     protected void onStart() {
