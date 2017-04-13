@@ -13,9 +13,11 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -150,10 +152,19 @@ public class ImageActivity extends AppCompatActivity {
                 }, 3000);
             }
         });
+        final CardView view=(CardView) findViewById(R.id.card_view);
         ImageButton share=(ImageButton) findViewById(R.id.share_button);
         share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                view.setAlpha(1);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        float i= (float) 0.2;
+                        view.setAlpha(i);
+                    }
+                },3000);
                 Intent shareIntent=new Intent(Intent.ACTION_SEND);
                 shareIntent.setType("*");
                 try {
@@ -171,10 +182,19 @@ public class ImageActivity extends AppCompatActivity {
         download.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                view.setAlpha(1);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        float i= (float) 0.2;
+                        view.setAlpha(i);
+                    }
+                },3000);
                 Toast.makeText(ImageActivity.this, "Downloading...", Toast.LENGTH_SHORT).show();
                 DownloadManager.Request download=downloadImage();
                 DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
-                download.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+//                download.allowScanningByMediaScanner();
+//                download.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
                 manager.enqueue(download);
             }
         });
@@ -183,6 +203,14 @@ public class ImageActivity extends AppCompatActivity {
         setButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                view.setAlpha(1);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        float i= (float) 0.2;
+                        view.setAlpha(i);
+                    }
+                },3000);
                 WallpaperManager manager=WallpaperManager.getInstance(getApplicationContext());
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                  Intent setWall=new Intent(manager.getCropAndSetWallpaperIntent(Uri.parse(url)));
@@ -203,7 +231,6 @@ public class ImageActivity extends AppCompatActivity {
         DownloadManager.Request download=new DownloadManager.Request(imageUri);
         download.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE| DownloadManager.Request.NETWORK_WIFI);
         download.setAllowedOverRoaming(true);
-        download.allowScanningByMediaScanner();
         download.setDestinationInExternalPublicDir("/WallPics","Image"+System.currentTimeMillis()+".jpg");
         return download;
     }
