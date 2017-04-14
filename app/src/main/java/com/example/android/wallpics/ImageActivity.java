@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
@@ -63,7 +64,8 @@ public class ImageActivity extends AppCompatActivity {
                             | View.SYSTEM_UI_FLAG_FULLSCREEN);
         }
         setContentView(R.layout.activity_image);
-
+        final CardView view=(CardView) findViewById(R.id.card_view);
+        transparency(view);
 
         url = getIntent().getExtras().getString("download");
         final ArrayList<String> images = getIntent().getExtras().getStringArrayList("imageList");
@@ -146,73 +148,45 @@ public class ImageActivity extends AppCompatActivity {
                 }, 3000);
             }
         });
-        final CardView view=(CardView) findViewById(R.id.card_view);
-        boolean alpha=new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                float i=(float)0.2;
-                view.setAlpha(i);
-            }
-        },2000);
         ImageButton share=(ImageButton) findViewById(R.id.share_button);
         share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                view.setAlpha(1);
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        float i= (float) 0.2;
-                        view.setAlpha(i);
-                    }
-                },3000);
-                Intent shareIntent=new Intent(Intent.ACTION_SEND);
-                shareIntent.setType("*");
-                try {
-                    Bitmap bmp=BitmapFactory.decodeStream(new URL(url).openConnection().getInputStream());
-                    String path= MediaStore.Images.Media.insertImage(getContentResolver(),bmp,"",null);
-                    shareIntent.putExtra(Intent.ACTION_ATTACH_DATA,path);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-//                shareIntent.putExtra(Intent.ACTION_ATTACH_DATA, imageUri);
-                startActivity(new Intent(Intent.createChooser(shareIntent,"Share Via")));
+                    transparency(view);
             }
         });
+
         ImageButton download=(ImageButton) findViewById(R.id.download);
         download.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                view.setAlpha(1);
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        float i= (float) 0.2;
-                        view.setAlpha(i);
-                    }
-                },3000);
-                Toast.makeText(ImageActivity.this, "Downloading...", Toast.LENGTH_SHORT).show();
-                DownloadManager.Request download=downloadImage();
-                DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
-//                download.allowScanningByMediaScanner();
-//                download.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-                manager.enqueue(download);
+                if(view.getAlpha()==0.2)
+                transparency(view);
+                else {
+                    Toast.makeText(ImageActivity.this, "Downloading...", Toast.LENGTH_SHORT).show();
+                    String imgName = "WallPics" + System.currentTimeMillis() + ".jpg";
+                    DownloadManager.Request download = downloadImage(imgName);
+                    DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+                    download.allowScanningByMediaScanner();
+                    download.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+                    manager.enqueue(download);
+                }
             }
         });
+
         ImageButton setButton=(ImageButton) findViewById(R.id.set_button);
         if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.KITKAT){
         setButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                view.setAlpha(1);
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        float i= (float) 0.2;
-                        view.setAlpha(i);
-                    }
-                },3000);
-                downloadImage();
+                if(view.getAlpha()==0.2)
+                    transparency(view);
+                else {
+                    String imgName = "WallPics" + System.currentTimeMillis() + ".jpg";
+                    DownloadManager.Request download = downloadImage(imgName);
+                    DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+                    manager.enqueue(download);
+                }
             }
         });}
         else
@@ -220,15 +194,24 @@ public class ImageActivity extends AppCompatActivity {
 
     }
 
-    private DownloadManager.Request downloadImage()
+    private DownloadManager.Request downloadImage(String imgName)
     {
-        File file=new File(Environment.getExternalStorageDirectory(),"/WallPics/");
-        if(!file.exists())
-            file.mkdir();
         DownloadManager.Request download=new DownloadManager.Request(imageUri);
         download.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE| DownloadManager.Request.NETWORK_WIFI);
         download.setAllowedOverRoaming(true);
-        download.setDestinationInExternalPublicDir("/WallPics","Image"+System.currentTimeMillis()+".jpg");
+        download.setDestinationInExternalPublicDir("/WallPics",imgName);
         return download;
+    }
+    private void transparency(final CardView card)
+    {
+        card.setAlpha(1);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                float i=(float)0.3;
+                card.setAlpha(i);
+            }
+        },3000);
+
     }
 }
