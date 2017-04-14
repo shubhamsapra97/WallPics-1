@@ -17,11 +17,9 @@ import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
-import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -32,12 +30,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.URL;
-import java.sql.Time;
 import java.util.ArrayList;
 
 public class ImageActivity extends AppCompatActivity {
@@ -153,6 +147,13 @@ public class ImageActivity extends AppCompatActivity {
             }
         });
         final CardView view=(CardView) findViewById(R.id.card_view);
+        boolean alpha=new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                float i=(float)0.2;
+                view.setAlpha(i);
+            }
+        },2000);
         ImageButton share=(ImageButton) findViewById(R.id.share_button);
         share.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -211,11 +212,7 @@ public class ImageActivity extends AppCompatActivity {
                         view.setAlpha(i);
                     }
                 },3000);
-                WallpaperManager manager=WallpaperManager.getInstance(getApplicationContext());
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                 Intent setWall=new Intent(manager.getCropAndSetWallpaperIntent(Uri.parse(url)));
-                    startActivity(Intent.createChooser(setWall,"Set as:"));
-                }
+                downloadImage();
             }
         });}
         else
