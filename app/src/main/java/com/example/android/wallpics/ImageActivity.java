@@ -151,6 +151,32 @@ public class ImageActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                     transparency(view);
+                String imgName = "WallPics" + System.currentTimeMillis() + ".jpg";
+                final ProgressDialog dialog=new ProgressDialog(ImageActivity.this);
+                dialog.setMessage("Preparing to Send...");
+                dialog.show();
+                DownloadManager.Request download = downloadImage(imgName);
+                final DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+                manager.enqueue(download);
+                BroadcastReceiver onComplete=new BroadcastReceiver() {
+                    public void onReceive(Context ctxt, Intent intent) {
+                        long downloadId=intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID,1);
+                        String action=intent.getAction();
+                        if(action.equals(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
+                        {
+                            Log.e(TAG, "onReceive: "+manager.getUriForDownloadedFile(downloadId) );
+                            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+                                Intent sendIntent=new Intent(Intent.ACTION_SEND);
+                                sendIntent.setType("image/jpg");
+                                sendIntent.putExtra(Intent.EXTRA_STREAM,manager.getUriForDownloadedFile(downloadId));
+                                sendIntent.putExtra(Intent.EXTRA_TEXT,"Sent Via WallPics!");
+                                dialog.dismiss();
+                                startActivity(Intent.createChooser(sendIntent,"Send Via:"));
+                            }
+                        }
+                    }
+                };
+                registerReceiver(onComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
             }
         });
 
