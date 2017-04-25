@@ -1,17 +1,18 @@
 package com.example.android.wallpics;
 
 import android.app.DownloadManager;
+import android.app.ProgressDialog;
 import android.app.WallpaperManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.content.IntentFilter;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Environment;
 import android.os.Handler;
-import android.provider.MediaStore;
-import android.provider.Settings;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
@@ -30,12 +31,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
-public class ImageActivity extends AppCompatActivity {
+public class ImageActivity extends AppCompatActivity{
     Uri imageUri;
     String url;
     Integer imgCount;
@@ -80,7 +79,6 @@ public class ImageActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 imgCount = dataSnapshot.getValue(Integer.class);
-                Log.i("ImageActivity: ", "onDataChange: " + imgCount);
             }
 
             @Override
@@ -160,9 +158,7 @@ public class ImageActivity extends AppCompatActivity {
         download.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(view.getAlpha()==0.2)
                 transparency(view);
-                else {
                     Toast.makeText(ImageActivity.this, "Downloading...", Toast.LENGTH_SHORT).show();
                     String imgName = "WallPics" + System.currentTimeMillis() + ".jpg";
                     DownloadManager.Request download = downloadImage(imgName);
@@ -170,7 +166,7 @@ public class ImageActivity extends AppCompatActivity {
                     download.allowScanningByMediaScanner();
                     download.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
                     manager.enqueue(download);
-                }
+
             }
         });
 
@@ -179,14 +175,32 @@ public class ImageActivity extends AppCompatActivity {
         setButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(view.getAlpha()==0.2)
                     transparency(view);
-                else {
                     String imgName = "WallPics" + System.currentTimeMillis() + ".jpg";
+               final ProgressDialog d=new ProgressDialog(ImageActivity.this, DialogInterface.BUTTON_NEGATIVE);
+                d.setMessage("Setting WallPic...");
+                d.show();
                     DownloadManager.Request download = downloadImage(imgName);
-                    DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
-                    manager.enqueue(download);
-                }
+                    final DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+                manager.enqueue(download);
+                BroadcastReceiver onComplete=new BroadcastReceiver() {
+                    public void onReceive(Context ctxt, Intent intent) {
+                        long downloadId=intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID,1);
+                        String action=intent.getAction();
+                        if(action.equals(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
+                        {
+                            Log.e(TAG, "onReceive: "+manager.getUriForDownloadedFile(downloadId) );
+                            WallpaperManager wManager=WallpaperManager.getInstance(ImageActivity.this);
+                            Intent wIntent= null;
+                            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+                                wIntent = new Intent(wManager.getCropAndSetWallpaperIntent(manager.getUriForDownloadedFile(downloadId)));
+                                d.dismiss();
+                            }
+                            startActivity(wIntent);
+                        }
+                    }
+                };
+                registerReceiver(onComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
             }
         });}
         else
@@ -199,9 +213,10 @@ public class ImageActivity extends AppCompatActivity {
         DownloadManager.Request download=new DownloadManager.Request(imageUri);
         download.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE| DownloadManager.Request.NETWORK_WIFI);
         download.setAllowedOverRoaming(true);
-        download.setDestinationInExternalPublicDir("/WallPics",imgName);
+        download.setDestinationInExternalPublicDir("",imgName);
         return download;
     }
+
     private void transparency(final CardView card)
     {
         card.setAlpha(1);
@@ -212,6 +227,6 @@ public class ImageActivity extends AppCompatActivity {
                 card.setAlpha(i);
             }
         },3000);
-
     }
+
 }

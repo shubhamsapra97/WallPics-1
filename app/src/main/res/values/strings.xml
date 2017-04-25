@@ -22,4 +22,5 @@
     <string name="image_share_button">image share button</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
+    <string name="folder_path">/sdcard/WallPics/</string>
 </resources>
