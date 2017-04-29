@@ -33,7 +33,6 @@ public class SignUpActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
         mAuth = FirebaseAuth.getInstance();
-
         signingUp = new ProgressDialog(this);
         final EditText newName = (EditText) findViewById(R.id.name);
         final EditText newMail = (EditText) findViewById(R.id.new_mail);

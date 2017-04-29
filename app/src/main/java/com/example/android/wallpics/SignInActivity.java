@@ -59,7 +59,6 @@ public class SignInActivity extends AppCompatActivity {
             }
         };
         mAuth.addAuthStateListener(mAuthListener);
-
         emailText = (EditText) findViewById(R.id.email_field);
         passText = (EditText) findViewById(R.id.password_field);
         SignInButton mGoogleBtn = (SignInButton) findViewById(R.id.google_btn);
