@@ -211,13 +211,20 @@ public class ImageActivity extends AppCompatActivity{
                 manager.enqueue(download);
                 BroadcastReceiver onComplete=new BroadcastReceiver() {
                     public void onReceive(Context ctxt, Intent intent) {
-                        long downloadId=intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID,1);
+                        final long downloadId=intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID,1);
                         String action=intent.getAction();
                         if(action.equals(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
                         {
                             Log.e(TAG, "onReceive: "+manager.getUriForDownloadedFile(downloadId) );
                             WallpaperManager wManager=WallpaperManager.getInstance(ImageActivity.this);
                             Intent wIntent= null;
+                            Snackbar.make(view,"File downloaded successfully",Snackbar.LENGTH_SHORT).setAction("Open", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent vIntent=new Intent(DownloadManager.ACTION_NOTIFICATION_CLICKED);
+                                    startActivity(vIntent);
+                                }
+                            }).show();
                             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
                                 wIntent = new Intent(wManager.getCropAndSetWallpaperIntent(manager.getUriForDownloadedFile(downloadId)));
                                 d.dismiss();

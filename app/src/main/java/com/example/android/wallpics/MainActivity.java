@@ -159,6 +159,8 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(new Intent(MainActivity.this, SignInActivity.class));
                     finish();
                     return true;
+                case R.id.my_acc:
+                    startActivity(new Intent(MainActivity.this,AccountActivity.class));
             }
             return mToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
         }
