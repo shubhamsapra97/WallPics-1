@@ -2,6 +2,7 @@ package com.example.android.wallpics;
 
 import android.content.Context;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,13 +13,14 @@ import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
-public class GridAdapter extends ArrayAdapter<String> {
-    public GridAdapter(Context context, ArrayList<String> grid) {
+class GridAdapter extends ArrayAdapter<String> {
+    GridAdapter(Context context, ArrayList<String> grid) {
         super(context, 0, grid);
     }
 
+    @NonNull
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, @NonNull ViewGroup parent) {
         View gridView = convertView;
         if (gridView == null) {
             gridView = LayoutInflater.from(getContext()).inflate(

@@ -1,22 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="#ff0000"
     android:layout_height="match_parent"
     tools:context="com.example.android.wallpics.AccountActivity">
+
     <ImageView
-        android:layout_centerHorizontal="true"
+        android:id="@+id/profile_image"
         android:layout_width="300dp"
         android:layout_height="300dp"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="25dp"
-        android:id="@+id/profile_image"
-        android:scaleType="centerCrop"
-        android:background="@drawable/shape_circle"/>
+        android:scaleType="centerCrop" />
+
     <TextView
+        android:id="@+id/profile_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/profile_name"/>
+        android:layout_below="@id/profile_image"
+        android:layout_margin="15dp"
+        android:textSize="30sp" />
 
 </RelativeLayout>

@@ -60,10 +60,10 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         progress = new ProgressDialog(this);
         DrawerLayout mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
-        mToggle = new ActionBarDrawerToggle(this, mDrawerLayout,R.string.open,R.string.close);
+        mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
         mDrawerLayout.addDrawerListener(mToggle);
         mToggle.syncState();
-        mAuth=FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance();
         mAuthListener = new AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -144,26 +144,27 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-        @Override
-        public boolean onOptionsItemSelected(MenuItem item) {
-            int id = item.getItemId();
-            switch (id) {
-                case R.id.upload_menu:
-                    Intent pick = new Intent(Intent.ACTION_PICK);
-                    pick.setType("image/*");
-                    Intent chooser = new Intent(Intent.createChooser(pick, "Select Image From"));
-                    startActivityForResult(chooser, GALLERY);
-                    return true;
-                case R.id.sign_out:
-                    mAuth.signOut();
-                    startActivity(new Intent(MainActivity.this, SignInActivity.class));
-                    finish();
-                    return true;
-                case R.id.my_acc:
-                    startActivity(new Intent(MainActivity.this,AccountActivity.class));
-            }
-            return mToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.upload_menu:
+                Intent pick = new Intent(Intent.ACTION_PICK);
+                pick.setType("image/*");
+                Intent chooser = new Intent(Intent.createChooser(pick, "Select Image From"));
+                startActivityForResult(chooser, GALLERY);
+                return true;
+            case R.id.sign_out:
+                mAuth.signOut();
+                startActivity(new Intent(MainActivity.this, SignInActivity.class));
+                finish();
+                return true;
+            case R.id.my_acc:
+                startActivity(new Intent(MainActivity.this, AccountActivity.class));
         }
+        return mToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
+    }
 
     protected void onStart() {
         super.onStart();

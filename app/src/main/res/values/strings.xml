@@ -24,4 +24,6 @@
     <string name="close">Close</string>
     <string name="folder_path">/sdcard/WallPics/</string>
     <string name="my_acc_string">My Account</string>
+    <string name="my_account">My Account</string>
+    <string name="about_us">About Us</string>
 </resources>

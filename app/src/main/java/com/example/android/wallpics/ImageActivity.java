@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
@@ -31,15 +30,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
-public class ImageActivity extends AppCompatActivity{
+public class ImageActivity extends AppCompatActivity {
     Uri imageUri;
     String url;
     Integer imgCount;
 
-    private static final String TAG="Image Activity";
+    private static final String TAG = "Image Activity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,8 +51,7 @@ public class ImageActivity extends AppCompatActivity{
                             | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                             | View.SYSTEM_UI_FLAG_FULLSCREEN
                             | View.SYSTEM_UI_FLAG_IMMERSIVE);
-        }
-        else {
+        } else {
             getWindow().getDecorView().setSystemUiVisibility(
                     View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                             | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
@@ -63,7 +60,7 @@ public class ImageActivity extends AppCompatActivity{
                             | View.SYSTEM_UI_FLAG_FULLSCREEN);
         }
         setContentView(R.layout.activity_image);
-        final CardView view=(CardView) findViewById(R.id.card_view);
+        final CardView view = (CardView) findViewById(R.id.card_view);
         transparency(view);
 
         url = getIntent().getExtras().getString("download");
@@ -116,7 +113,7 @@ public class ImageActivity extends AppCompatActivity{
             }
         });
         Glide.with(getApplicationContext()).load(imageUri).into(bigImage);
-        Log.i(TAG, "onCreate: "+imageUri);
+        Log.i(TAG, "onCreate: " + imageUri);
 
 
         bigImage.setOnClickListener(new View.OnClickListener() {
@@ -133,8 +130,7 @@ public class ImageActivity extends AppCompatActivity{
                                             | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
                                             | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
                                             | View.SYSTEM_UI_FLAG_IMMERSIVE);
-                        }
-                        else {
+                        } else {
                             getWindow().getDecorView().setSystemUiVisibility(
                                     View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                                             | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
@@ -146,32 +142,31 @@ public class ImageActivity extends AppCompatActivity{
                 }, 3000);
             }
         });
-        ImageButton share=(ImageButton) findViewById(R.id.share_button);
+        ImageButton share = (ImageButton) findViewById(R.id.share_button);
         share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    transparency(view);
+                transparency(view);
                 String imgName = "WallPics" + System.currentTimeMillis() + ".jpg";
-                final ProgressDialog dialog=new ProgressDialog(ImageActivity.this);
+                final ProgressDialog dialog = new ProgressDialog(ImageActivity.this);
                 dialog.setMessage("Preparing to Send...");
                 dialog.show();
                 DownloadManager.Request download = downloadImage(imgName);
                 final DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
                 manager.enqueue(download);
-                BroadcastReceiver onComplete=new BroadcastReceiver() {
+                BroadcastReceiver onComplete = new BroadcastReceiver() {
                     public void onReceive(Context ctxt, Intent intent) {
-                        long downloadId=intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID,1);
-                        String action=intent.getAction();
-                        if(action.equals(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
-                        {
-                            Log.e(TAG, "onReceive: "+manager.getUriForDownloadedFile(downloadId) );
+                        long downloadId = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, 1);
+                        String action = intent.getAction();
+                        if (action.equals(DownloadManager.ACTION_DOWNLOAD_COMPLETE)) {
+                            Log.e(TAG, "onReceive: " + manager.getUriForDownloadedFile(downloadId));
                             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
-                                Intent sendIntent=new Intent(Intent.ACTION_SEND);
+                                Intent sendIntent = new Intent(Intent.ACTION_SEND);
                                 sendIntent.setType("image/jpg");
-                                sendIntent.putExtra(Intent.EXTRA_STREAM,manager.getUriForDownloadedFile(downloadId));
-                                sendIntent.putExtra(Intent.EXTRA_TEXT,"Sent Via WallPics!");
+                                sendIntent.putExtra(Intent.EXTRA_STREAM, manager.getUriForDownloadedFile(downloadId));
+                                sendIntent.putExtra(Intent.EXTRA_TEXT, "Sent Via WallPics!");
                                 dialog.dismiss();
-                                startActivity(Intent.createChooser(sendIntent,"Send Via:"));
+                                startActivity(Intent.createChooser(sendIntent, "Send Via:"));
                             }
                         }
                     }
@@ -180,86 +175,83 @@ public class ImageActivity extends AppCompatActivity{
             }
         });
 
-        ImageButton download=(ImageButton) findViewById(R.id.download);
+        ImageButton download = (ImageButton) findViewById(R.id.download);
         download.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 transparency(view);
-                    Toast.makeText(ImageActivity.this, "Downloading...", Toast.LENGTH_SHORT).show();
-                    String imgName = "WallPics" + System.currentTimeMillis() + ".jpg";
-                    DownloadManager.Request download = downloadImage(imgName);
-                    DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
-                    download.allowScanningByMediaScanner();
-                    download.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-                    manager.enqueue(download);
+                Toast.makeText(ImageActivity.this, "Downloading...", Toast.LENGTH_SHORT).show();
+                String imgName = "WallPics" + System.currentTimeMillis() + ".jpg";
+                DownloadManager.Request download = downloadImage(imgName);
+                DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+                download.allowScanningByMediaScanner();
+                download.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+                manager.enqueue(download);
 
             }
         });
 
-        ImageButton setButton=(ImageButton) findViewById(R.id.set_button);
-        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.KITKAT){
-        setButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        ImageButton setButton = (ImageButton) findViewById(R.id.set_button);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            setButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
                     transparency(view);
                     String imgName = "WallPics" + System.currentTimeMillis() + ".jpg";
-               final ProgressDialog d=new ProgressDialog(ImageActivity.this, DialogInterface.BUTTON_NEGATIVE);
-                d.setMessage("Setting WallPic...");
-                d.show();
+                    final ProgressDialog d = new ProgressDialog(ImageActivity.this, DialogInterface.BUTTON_NEGATIVE);
+                    d.setMessage("Setting WallPic...");
+                    d.show();
                     DownloadManager.Request download = downloadImage(imgName);
                     final DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
-                manager.enqueue(download);
-                BroadcastReceiver onComplete=new BroadcastReceiver() {
-                    public void onReceive(Context ctxt, Intent intent) {
-                        final long downloadId=intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID,1);
-                        String action=intent.getAction();
-                        if(action.equals(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
-                        {
-                            Log.e(TAG, "onReceive: "+manager.getUriForDownloadedFile(downloadId) );
-                            WallpaperManager wManager=WallpaperManager.getInstance(ImageActivity.this);
-                            Intent wIntent= null;
-                            Snackbar.make(view,"File downloaded successfully",Snackbar.LENGTH_SHORT).setAction("Open", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    Intent vIntent=new Intent(DownloadManager.ACTION_NOTIFICATION_CLICKED);
-                                    startActivity(vIntent);
+                    manager.enqueue(download);
+                    BroadcastReceiver onComplete = new BroadcastReceiver() {
+                        public void onReceive(Context ctxt, Intent intent) {
+                            final long downloadId = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, 1);
+                            String action = intent.getAction();
+                            if (action.equals(DownloadManager.ACTION_DOWNLOAD_COMPLETE)) {
+                                Log.e(TAG, "onReceive: " + manager.getUriForDownloadedFile(downloadId));
+                                WallpaperManager wManager = WallpaperManager.getInstance(ImageActivity.this);
+                                Intent wIntent = null;
+                                Snackbar.make(view, "File downloaded successfully", Snackbar.LENGTH_SHORT).setAction("Open", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        Intent vIntent = new Intent(DownloadManager.ACTION_NOTIFICATION_CLICKED);
+                                        startActivity(vIntent);
+                                    }
+                                }).show();
+                                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+                                    wIntent = new Intent(wManager.getCropAndSetWallpaperIntent(manager.getUriForDownloadedFile(downloadId)));
+                                    d.dismiss();
                                 }
-                            }).show();
-                            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
-                                wIntent = new Intent(wManager.getCropAndSetWallpaperIntent(manager.getUriForDownloadedFile(downloadId)));
-                                d.dismiss();
+                                startActivity(wIntent);
                             }
-                            startActivity(wIntent);
                         }
-                    }
-                };
-                registerReceiver(onComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
-            }
-        });}
-        else
+                    };
+                    registerReceiver(onComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+                }
+            });
+        } else
             setButton.setVisibility(View.GONE);
 
     }
 
-    private DownloadManager.Request downloadImage(String imgName)
-    {
-        DownloadManager.Request download=new DownloadManager.Request(imageUri);
-        download.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE| DownloadManager.Request.NETWORK_WIFI);
+    private DownloadManager.Request downloadImage(String imgName) {
+        DownloadManager.Request download = new DownloadManager.Request(imageUri);
+        download.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE | DownloadManager.Request.NETWORK_WIFI);
         download.setAllowedOverRoaming(true);
-        download.setDestinationInExternalPublicDir("",imgName);
+        download.setDestinationInExternalPublicDir("", imgName);
         return download;
     }
 
-    private void transparency(final CardView card)
-    {
+    private void transparency(final CardView card) {
         card.setAlpha(1);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                float i=(float)0.3;
+                float i = (float) 0.3;
                 card.setAlpha(i);
             }
-        },3000);
+        }, 3000);
     }
 
 }
