@@ -43,7 +43,7 @@
             android:name=".SignUpActivity"
             android:screenOrientation="sensorPortrait"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
-        <activity android:name=".AccountActivity"></activity>
+        <activity android:name=".AccountActivity" android:theme="@style/AppTheme"/>
     </application>
 
 </manifest>
