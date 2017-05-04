@@ -2,11 +2,13 @@ package com.example.android.wallpics;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,7 +27,8 @@ public class SignUpActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private ProgressDialog signingUp;
-
+    private Uri photoUri=Uri.parse("android.resource://com.example.android.wallpics/drawable/cup");
+    private static int GALLERY = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +39,16 @@ public class SignUpActivity extends AppCompatActivity {
         final EditText newMail = (EditText) findViewById(R.id.new_mail);
         final EditText newPass = (EditText) findViewById(R.id.new_pass);
         final EditText conPass = (EditText) findViewById(R.id.con_pass);
+        Button addImage=(Button) findViewById(R.id.add_image);
+        addImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent pick = new Intent(Intent.ACTION_PICK);
+                pick.setType("image/*");
+                Intent chooser = new Intent(Intent.createChooser(pick, "Select Image From"));
+                startActivityForResult(chooser, GALLERY);
+            }
+        });
         Button signUp = (Button) findViewById(R.id.sign_up);
 
         signUp.setOnClickListener(new View.OnClickListener() {
@@ -55,15 +68,17 @@ public class SignUpActivity extends AppCompatActivity {
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (task.isSuccessful()) {
                                         FirebaseUser user = mAuth.getCurrentUser();
-                                        if (user != null)
-                                            user.updateProfile(new UserProfileChangeRequest.Builder().setDisplayName(name).build());
+                                        if (user != null) {
+                                            user.updateProfile(new UserProfileChangeRequest.Builder().setDisplayName(name).setPhotoUri(photoUri).build());
+                                        }
                                         signingUp.dismiss();
                                         Toast.makeText(SignUpActivity.this, "Welcome To WallPics, " + name + "!", Toast.LENGTH_SHORT).show();
                                         startActivity(new Intent(SignUpActivity.this, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                                         finish();
-                                    } else
+                                    } else {
                                         Toast.makeText(SignUpActivity.this, "Sign Up Failed...", Toast.LENGTH_SHORT).show();
-                                }
+                                    signingUp.dismiss();
+                                }                                }
                             });
                         } else {
                             signingUp.dismiss();
@@ -76,5 +91,12 @@ public class SignUpActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode==GALLERY&&resultCode==RESULT_OK){
+            photoUri=data.getData();
+        }
     }
 }

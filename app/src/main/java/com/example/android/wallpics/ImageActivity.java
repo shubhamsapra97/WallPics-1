@@ -103,19 +103,18 @@ public class ImageActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (images != null) {
-                    if (images.indexOf(url) < imgCount - 1) {
+                    try {
                         url = images.get(images.indexOf(url) + 1);
                         imageUri = Uri.parse(url);
                         Glide.with(getApplicationContext()).load(imageUri).into(bigImage);
-                    } else
-                        Toast.makeText(ImageActivity.this, "Change your way, This is the last one here.", Toast.LENGTH_SHORT).show();
+                    } catch (IndexOutOfBoundsException e) {
+                        e.printStackTrace();
+                        Toast.makeText(ImageActivity.this, "Change Your Way, This is the last one here.", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
         Glide.with(getApplicationContext()).load(imageUri).into(bigImage);
-        Log.i(TAG, "onCreate: " + imageUri);
-
-
         bigImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
