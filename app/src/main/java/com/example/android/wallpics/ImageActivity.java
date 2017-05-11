@@ -36,7 +36,6 @@ public class ImageActivity extends AppCompatActivity {
     Uri imageUri;
     String url;
     Integer imgCount;
-
     private static final String TAG = "Image Activity";
 
     @Override
@@ -238,7 +237,7 @@ public class ImageActivity extends AppCompatActivity {
         DownloadManager.Request download = new DownloadManager.Request(imageUri);
         download.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE | DownloadManager.Request.NETWORK_WIFI);
         download.setAllowedOverRoaming(true);
-        download.setDestinationInExternalPublicDir("", imgName);
+        download.setDestinationInExternalPublicDir("WallPics", imgName);
         return download;
     }
 

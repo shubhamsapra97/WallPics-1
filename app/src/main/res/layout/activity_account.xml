@@ -16,12 +16,12 @@
     <TextView
         android:id="@+id/profile_name"
         android:layout_width="300dp"
-        android:layout_centerHorizontal="true"
         android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:textAlignment="center"
         android:layout_below="@id/profile_image"
+        android:layout_centerHorizontal="true"
         android:layout_margin="25dp"
-        android:textSize="30sp" />
+        android:textAlignment="center"
+        android:textSize="30sp"
+        android:textStyle="bold" />
 
 </RelativeLayout>

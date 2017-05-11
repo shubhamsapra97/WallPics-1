@@ -21,7 +21,6 @@ public class AccountActivity extends AppCompatActivity {
         TextView profileName = (TextView) findViewById(R.id.profile_name);
         String name = "User not Signed In";
         if (cUser != null) {
-            Log.e("asdfgh", "onCreate: "+cUser.getPhotoUrl());
             Glide.with(getApplicationContext()).load(cUser.getPhotoUrl()).into((ImageView) findViewById(R.id.profile_image));
             name = cUser.getDisplayName();
         } else

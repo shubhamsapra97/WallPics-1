@@ -1,12 +1,11 @@
 package com.example.android.wallpics;
 
+
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -46,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseReference mDatabase;
     private DatabaseReference databaseImageCount;
     private FirebaseUser user;
-    private ActionBarDrawerToggle mToggle;
     private ProgressDialog progress;
     private GridView mGridView;
     private GridAdapter adapter;
@@ -57,12 +55,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //noinspection ConstantConditions
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         progress = new ProgressDialog(this);
-        DrawerLayout mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
-        mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
-        mDrawerLayout.addDrawerListener(mToggle);
-        mToggle.syncState();
         mAuth = FirebaseAuth.getInstance();
         mAuthListener = new AuthStateListener() {
             @Override
@@ -163,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.my_acc:
                 startActivity(new Intent(MainActivity.this, AccountActivity.class));
         }
-        return mToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
+        return super.onOptionsItemSelected(item);
     }
 
     protected void onStart() {
