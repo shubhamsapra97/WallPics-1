@@ -42,22 +42,19 @@ public class ImageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            getWindow().getDecorView().setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_IMMERSIVE);
-        } else {
-            getWindow().getDecorView().setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_FULLSCREEN);
-        }
+        getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_IMMERSIVE
+                    |View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                    | View.SYSTEM_UI_FLAG_FULLSCREEN);
         setContentView(R.layout.activity_image);
         final CardView view = (CardView) findViewById(R.id.card_view);
         transparency(view);
@@ -113,6 +110,8 @@ public class ImageActivity extends AppCompatActivity {
                 }
             }
         });
+
+
         Glide.with(getApplicationContext()).load(imageUri).into(bigImage);
         bigImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,22 +119,19 @@ public class ImageActivity extends AppCompatActivity {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                            getWindow().getDecorView().setSystemUiVisibility(
-                                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
-                                            | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
-                                            | View.SYSTEM_UI_FLAG_IMMERSIVE);
-                        } else {
-                            getWindow().getDecorView().setSystemUiVisibility(
-                                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
-                                            | View.SYSTEM_UI_FLAG_FULLSCREEN);
-                        }
+                        getWindow().getDecorView().setSystemUiVisibility(
+                                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                                        | View.SYSTEM_UI_FLAG_FULLSCREEN);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+                            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_IMMERSIVE
+                                    |View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                                    | View.SYSTEM_UI_FLAG_FULLSCREEN);
                     }
                 }, 3000);
             }
@@ -181,10 +177,19 @@ public class ImageActivity extends AppCompatActivity {
                 Toast.makeText(ImageActivity.this, "Downloading...", Toast.LENGTH_SHORT).show();
                 String imgName = "WallPics" + System.currentTimeMillis() + ".jpg";
                 DownloadManager.Request download = downloadImage(imgName);
-                DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+                final DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
                 download.allowScanningByMediaScanner();
                 download.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
                 manager.enqueue(download);
+                BroadcastReceiver broadcastReceiver=new BroadcastReceiver() {
+                    @Override
+                    public void onReceive(Context context, final Intent intent) {
+                        String action = intent.getAction();
+                        if(action.equals(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
+                            Snackbar.make(view, "File downloaded successfully", Snackbar.LENGTH_SHORT).show();
+                    }
+                };
+                registerReceiver(broadcastReceiver,new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
 
             }
         });
@@ -199,6 +204,7 @@ public class ImageActivity extends AppCompatActivity {
                     final ProgressDialog d = new ProgressDialog(ImageActivity.this, DialogInterface.BUTTON_NEGATIVE);
                     d.setMessage("Setting WallPic...");
                     d.show();
+                    d.setCanceledOnTouchOutside(false);
                     DownloadManager.Request download = downloadImage(imgName);
                     final DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
                     manager.enqueue(download);
@@ -207,16 +213,8 @@ public class ImageActivity extends AppCompatActivity {
                             final long downloadId = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, 1);
                             String action = intent.getAction();
                             if (action.equals(DownloadManager.ACTION_DOWNLOAD_COMPLETE)) {
-                                Log.e(TAG, "onReceive: " + manager.getUriForDownloadedFile(downloadId));
                                 WallpaperManager wManager = WallpaperManager.getInstance(ImageActivity.this);
                                 Intent wIntent = null;
-                                Snackbar.make(view, "File downloaded successfully", Snackbar.LENGTH_SHORT).setAction("Open", new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        Intent vIntent = new Intent(DownloadManager.ACTION_NOTIFICATION_CLICKED);
-                                        startActivity(vIntent);
-                                    }
-                                }).show();
                                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
                                     wIntent = new Intent(wManager.getCropAndSetWallpaperIntent(manager.getUriForDownloadedFile(downloadId)));
                                     d.dismiss();
@@ -253,3 +251,11 @@ public class ImageActivity extends AppCompatActivity {
     }
 
 }
+//.setAction("Open", new View.OnClickListener() {
+//@Override
+//public void onClick(View v) {
+//        Intent vIntent = new Intent(Intent.ACTION_VIEW);
+//        vIntent.setData(manager.getUriForDownloadedFile(intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID,1)));
+//        startActivity(vIntent);
+//        }
+//        })
